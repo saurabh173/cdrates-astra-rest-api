@@ -59,6 +59,7 @@ public class ThirdPartyCDRatesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Processed successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input provided"),
+            @ApiResponse(responseCode = "429", description = "Too many requests"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/v1/thirdparty/currentrates/{zip}")
@@ -106,6 +107,7 @@ public class ThirdPartyCDRatesController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Processed successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input provided"),
+            @ApiResponse(responseCode = "429", description = "Too many requests"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/v1/thirdparty/hisoricalrates/{zip}")
