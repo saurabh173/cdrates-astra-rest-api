@@ -12,134 +12,145 @@ import java.util.Date;
 public class CDRates {
 
     @Id
-    private String cdUniqueId;
+    private String id;
 
-    private int termLengthInMonths;
-    private double interestRate;
-    private double managerRate;
-    private double APY;
-    private String stateCode;
-    private int minimumDeposit;
-    private int maximumDeposit;
-    private int penaltyDays;
-    private double penaltyPercentage;
-    private String cdType;
+    private double apy;
+    private String cdtype;
+    private String cduniqueid;
+    private String createdby;
+    private String createdon;
+    private String enddate;
+    private double interestrate;
+    private double managerrate;
+    private int maximumdeposit;
+    private int minimumdeposit;
+    private int penaltydays;
+    private double penaltypercentage;
+    private String startdate;
+    private String statecode;
     private String status;
-    private Date startDate;
-    private Date endDate;
-    private String createdBy;
-    private String updatedBy;
+    private int termlength;
+    private String updatedby;
+    private String updatedon;
 
-    public CDRates(){
-
-    }
-    public CDRates(String cdUniqueId, int termLengthInMonths, double interestRate, double managerRate, double APY, String stateCode, int minimumDeposit, int maximumDeposit, int penaltyDays, double penaltyPercentage, String cdType, String status, Date startDate, Date endDate, String createdBy, String updatedBy) {
-        this.cdUniqueId = cdUniqueId;
-        this.termLengthInMonths = termLengthInMonths;
-        this.interestRate = interestRate;
-        this.managerRate = managerRate;
-        this.APY = APY;
-        this.stateCode = stateCode;
-        this.minimumDeposit = minimumDeposit;
-        this.maximumDeposit = maximumDeposit;
-        this.penaltyDays = penaltyDays;
-        this.penaltyPercentage = penaltyPercentage;
-        this.cdType = cdType;
-        this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
+    public String getId() {
+        return id;
     }
 
-    //Excluding Manager Rate
-    public CDRates(String cdUniqueId, int termLengthInMonths, double interestRate,  double APY, String stateCode , int minimumDeposit, int maximumDeposit, int penaltyDays, double penaltyPercentage, String cdType, String status, Date startDate, Date endDate, String createdBy, String updatedBy) {
-        this.cdUniqueId = cdUniqueId;
-        this.termLengthInMonths = termLengthInMonths;
-        this.interestRate = interestRate;
-        this.APY = APY;
-        this.stateCode = stateCode;
-        this.minimumDeposit = minimumDeposit;
-        this.maximumDeposit = maximumDeposit;
-        this.penaltyDays = penaltyDays;
-        this.penaltyPercentage = penaltyPercentage;
-        this.cdType = cdType;
-        this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-    }
-    public String getCdUniqueId() {
-        return cdUniqueId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setCdUniqueId(String cdUniqueId) {
-        this.cdUniqueId = cdUniqueId;
+    public double getApy() {
+        return apy;
     }
 
-    public int getTermLengthInMonths() {
-        return termLengthInMonths;
+    public void setApy(double apy) {
+        this.apy = apy;
     }
 
-    public void setTermLengthInMonths(int termLengthInMonths) {
-        this.termLengthInMonths = termLengthInMonths;
+    public String getCdtype() {
+        return cdtype;
     }
 
-    public double getInterestRate() {
-        return interestRate;
+    public void setCdtype(String cdtype) {
+        this.cdtype = cdtype;
     }
 
-    public void setInterestRate(double interestRate) {
-        this.interestRate = interestRate;
+    public String getCduniqueid() {
+        return cduniqueid;
     }
 
-    public double getManagerRate() {
-        return managerRate;
+    public void setCduniqueid(String cduniqueid) {
+        this.cduniqueid = cduniqueid;
     }
 
-    public void setManagerRate(double managerRate) {
-        this.managerRate = managerRate;
+    public String getCreatedby() {
+        return createdby;
     }
 
-    public double getAPY() {
-        return APY;
+    public void setCreatedby(String createdby) {
+        this.createdby = createdby;
     }
 
-    public void setAPY(double APY) {
-        this.APY = APY;
+    public String getCreatedon() {
+        return createdon;
     }
 
-    public int getMinimumDeposit() {
-        return minimumDeposit;
+    public void setCreatedon(String createdon) {
+        this.createdon = createdon;
     }
 
-    public void setMinimumDeposit(int minimumDeposit) {
-        this.minimumDeposit = minimumDeposit;
+    public String getEnddate() {
+        return enddate;
     }
 
-    public int getPenaltyDays() {
-        return penaltyDays;
+    public void setEnddate(String enddate) {
+        this.enddate = enddate;
     }
 
-    public void setPenaltyDays(int penaltyDays) {
-        this.penaltyDays = penaltyDays;
+    public double getInterestrate() {
+        return interestrate;
     }
 
-    public double getPenaltyPercentage() {
-        return penaltyPercentage;
+    public void setInterestrate(double interestrate) {
+        this.interestrate = interestrate;
     }
 
-    public void setPenaltyPercentage(double penaltyPercentage) {
-        this.penaltyPercentage = penaltyPercentage;
+    public double getManagerrate() {
+        return managerrate;
     }
 
-    public String getCdType() {
-        return cdType;
+    public void setManagerrate(double managerrate) {
+        this.managerrate = managerrate;
     }
 
-    public void setCdType(String cdType) {
-        this.cdType = cdType;
+    public int getMaximumdeposit() {
+        return maximumdeposit;
+    }
+
+    public void setMaximumdeposit(int maximumdeposit) {
+        this.maximumdeposit = maximumdeposit;
+    }
+
+    public int getMinimumdeposit() {
+        return minimumdeposit;
+    }
+
+    public void setMinimumdeposit(int minimumdeposit) {
+        this.minimumdeposit = minimumdeposit;
+    }
+
+    public int getPenaltydays() {
+        return penaltydays;
+    }
+
+    public void setPenaltydays(int penaltydays) {
+        this.penaltydays = penaltydays;
+    }
+
+    public double getPenaltypercentage() {
+        return penaltypercentage;
+    }
+
+    public void setPenaltypercentage(double penaltypercentage) {
+        this.penaltypercentage = penaltypercentage;
+    }
+
+    public String getStartdate() {
+        return startdate;
+    }
+
+    public void setStartdate(String startdate) {
+        this.startdate = startdate;
+    }
+
+    public String getStatecode() {
+        return statecode;
+    }
+
+    public void setStatecode(String statecode) {
+        this.statecode = statecode;
     }
 
     public String getStatus() {
@@ -150,51 +161,27 @@ public class CDRates {
         this.status = status;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public int getTermlength() {
+        return termlength;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setTermlength(int termlength) {
+        this.termlength = termlength;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getUpdatedby() {
+        return updatedby;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setUpdatedby(String updatedby) {
+        this.updatedby = updatedby;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getUpdatedon() {
+        return updatedon;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public String getStateCode() {
-        return stateCode;
-    }
-
-    public void setStateCode(String stateCode) {
-        this.stateCode = stateCode;
-    }
-
-    public int getMaximumDeposit() {
-        return maximumDeposit;
-    }
-
-    public void setMaximumDeposit(int maximumDeposit) {
-        this.maximumDeposit = maximumDeposit;
+    public void setUpdatedon(String updatedon) {
+        this.updatedon = updatedon;
     }
 }
