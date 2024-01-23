@@ -5,13 +5,14 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @OpenAPIDefinition(
 		info = @Info(
 				title = "Bank Certificate of Deposit Rates APIs",
-				description = "This application offers APIs for different groups to access and manage certificates of deposit rates.<br><br> GraphQL end point can be accessed from host:8080/graphql",
+				description = "This application offers APIs for different groups to access and manage certificates of deposit rates.<br><br> GraphQL end point can be accessed from host:8080/graphql <br><br>Sample test zip: 03801",
 				version = "1"
 		),
 		tags = {
@@ -23,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 )
 
 @SpringBootApplication
+@EnableCaching
 public class DemoApplication {
 
 	public static void main(String[] args) {

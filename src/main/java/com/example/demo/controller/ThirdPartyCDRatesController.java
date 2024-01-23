@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -61,6 +62,7 @@ public class ThirdPartyCDRatesController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/v1/thirdparty/currentrates/{zip}")
+    @Cacheable(value = "nonManagerCDRates", key = "#zip")
     private ResponseEntity<List<CDRatesWithoutManagerRate>> getRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = conversionUtility.getState(zip);
         LOGGER.info("getRatesForConsumer request received for Zip " + zip);
@@ -107,6 +109,7 @@ public class ThirdPartyCDRatesController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/v1/thirdparty/hisoricalrates/{zip}")
+    @Cacheable(value = "nonManagerCDHistoryRates", key = "#zip")
     private ResponseEntity<List<CDRatesWithoutManagerRate>> getHistoricalRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = conversionUtility.getState(zip);
         if (state.equals("")){
