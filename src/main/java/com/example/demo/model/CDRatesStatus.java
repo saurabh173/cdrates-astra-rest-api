@@ -3,12 +3,8 @@ package com.example.demo.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-//import javax.persistence.Entity;
-//import javax.persistence.Id;
-//import javax.persistence.Table;
 import java.util.Date;
 
-//@Entity
 @Table
 public class CDRatesStatus {
 

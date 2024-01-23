@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.CDHistoricalRatesRepo;
-import com.example.demo.dao.CDRatesRepo;
-import com.example.demo.dao.CDRatesStatusRepo;
 import com.example.demo.model.CDRateUpdate;
 import com.example.demo.model.CDRates;
 import com.example.demo.service.ConversionUtility;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.net.http.HttpClient;
 import java.util.UUID;
 
 @RestController
@@ -35,19 +31,7 @@ public class AdminCDRatesController {
     @Autowired
     private ObjectMapper objectMapper;  // Autowire ObjectMapper
 
-//    @Autowired
-//    RestTemplate restTemplate;
-
     private final RestTemplate restTemplate;
-
-    @Autowired
-    private CDRatesRepo rateRepo;
-
-    @Autowired
-    private CDRatesStatusRepo statusRepo;
-
-    @Autowired
-    private CDHistoricalRatesRepo historicalRatesRepo;
 
     @Autowired
     private ConversionUtility conversionUtility;

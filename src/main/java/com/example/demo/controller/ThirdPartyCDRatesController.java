@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.CDHistoricalRatesRepo;
-import com.example.demo.dao.CDRatesRepo;
-import com.example.demo.dao.CDRatesStatusRepo;
 import com.example.demo.exception.CustomBadRequestException;
 import com.example.demo.model.CDRatesWithoutManagerRate;
 import com.example.demo.service.ConversionUtility;
@@ -39,15 +36,6 @@ public class ThirdPartyCDRatesController {
 
     @Autowired
     RestTemplate restTemplate;
-
-    @Autowired
-    private CDRatesRepo rateRepo;
-
-    @Autowired
-    private CDRatesStatusRepo statusRepo;
-
-    @Autowired
-    private CDHistoricalRatesRepo historicalRatesRepo;
 
     @Autowired
     private ConversionUtility conversionUtility;
