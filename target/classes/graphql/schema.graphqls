@@ -1,0 +1,47 @@
+type Query {
+    managerRatesByZip(zip: String): [CDRates]
+    ratesByZip(zip: String): [CDRatesWithoutManagerRate]
+}
+
+type CDRates {
+    id: String
+    apy: Float
+    cdtype: String
+    cduniqueid: String
+    createdby: String
+    createdon: String
+    enddate: String
+    interestrate: Float
+    managerrate: Float
+    maximumdeposit: Int
+    minimumdeposit: Int
+    penaltydays: Int
+    penaltypercentage: Float
+    startdate: String
+    statecode: String
+    status: String
+    termlength: Int
+    updatedby: String
+    updatedon: String
+}
+
+type CDRatesWithoutManagerRate {
+    id: String
+    apy: Float
+    cdtype: String
+    cduniqueid: String
+    createdby: String
+    createdon: String
+    enddate: String
+    interestrate: Float
+    maximumdeposit: Int
+    minimumdeposit: Int
+    penaltydays: Int
+    penaltypercentage: Float
+    startdate: String
+    statecode: String
+    status: String
+    termlength: Int
+    updatedby: String
+    updatedon: String
+}
