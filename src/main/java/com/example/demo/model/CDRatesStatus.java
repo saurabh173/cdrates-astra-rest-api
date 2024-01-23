@@ -1,14 +1,14 @@
 package com.example.demo.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.cassandra.core.mapping.Table;
+//import org.springframework.data.annotation.Id;
+//import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.Date;
 
-@Table
+//@Table
 public class CDRatesStatus {
 
-    @Id
+    //@Id
     private String cdUniqueId;
 
     private long amountCollected;

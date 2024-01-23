@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @OpenAPIDefinition(
 		info = @Info(
 				title = "Bank Certificate of Deposit Rates APIs",
-				description = "This application offers APIs for different groups to access and manage certificates of deposit rates",
+				description = "This application offers APIs for different groups to access and manage certificates of deposit rates.<br><br> GraphQL end point can be accessed from host:8080/graphql",
 				version = "1"
 		),
 		tags = {

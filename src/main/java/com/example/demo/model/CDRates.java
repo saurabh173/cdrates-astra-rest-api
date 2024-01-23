@@ -1,13 +1,13 @@
 package com.example.demo.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.cassandra.core.mapping.Table;
+//import org.springframework.data.annotation.Id;
+//import org.springframework.data.cassandra.core.mapping.Table;
 
 
-@Table
+//@Table
 public class CDRates {
 
-    @Id
+    //@Id
     private String id;
 
     private double apy;

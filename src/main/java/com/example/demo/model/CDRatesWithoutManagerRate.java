@@ -1,12 +1,12 @@
 package com.example.demo.model;
 
-import org.springframework.data.annotation.Id;
+//import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
 public class CDRatesWithoutManagerRate {
 
-    @Id
+    //@Id
     private String id;
 
     private double apy;
