@@ -14,9 +14,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -24,6 +33,9 @@ import java.util.Optional;
 
 @RestController
 public class CDRatesController {
+
+    @Autowired
+    RestTemplate restTemplate;
 
     @Autowired
     private CDRatesRepo rateRepo;
@@ -37,7 +49,13 @@ public class CDRatesController {
     @Autowired
     private ConversionUtility conversionUtility;
 
+    private final Environment env;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CDRatesController.class);
+
+    public CDRatesController(Environment env) {
+        this.env = env;
+    }
 
     /**
      * Get certificate of deposit interest rates for consumers.
@@ -52,16 +70,72 @@ public class CDRatesController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/v1/consumer/currentrates/{zip}")
-    private ResponseEntity<List<CDRatesWithoutManagerRate>> getRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view certificate of deposit interest rates", required = true) @PathVariable String zip){
+    private ResponseEntity<Object> getRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = conversionUtility.getState(zip);
         LOGGER.info("getRatesForConsumer request received for Zip " + zip);
+
         if (state.equals("")){
             throw new CustomBadRequestException("Invalid zip supplied");
         }
-        //ResponseEntity<CDRates> rates = (ResponseEntity<CDRates>) rateRepo.findRatesExcludingManagerRate(state);
-        //LOGGER.info(String.valueOf(rates));
-        //return rates;
-        return ResponseEntity.ok(rateRepo.findRatesExcludingManagerRate(state)) ;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("x-cassandra-token", env.getProperty("ASTRA_DB_APPLICATION_TOKEN"));
+        HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
+
+
+        //String whereCondition = "{\"statecode\" : {\"$eq\" : \"" + state + "\"}}";
+        String whereCondition = "where={}";
+        String encodedWhereCondition = UriUtils.encode(whereCondition, StandardCharsets.UTF_8);
+
+        ResponseEntity<Object> resp = restTemplate.exchange(
+                "https://" +
+                        env.getProperty("ASTRA_DB_ID") +
+                        "-" +
+                        env.getProperty("ASTRA_DB_REGION") +
+                        ".apps.astra.datastax.com/api/rest/v2/keyspaces/" +
+                        env.getProperty("ASTRA_DB_KEYSPACE") +
+                        "/cdrates?" + encodedWhereCondition ,
+                HttpMethod.GET,
+                httpEntity,
+                Object.class
+        );
+
+        /* ****WORKING
+        ResponseEntity<Object> resp = restTemplate.exchange(
+                "https://" +
+                        env.getProperty("ASTRA_DB_ID") +
+                        "-" +
+                        env.getProperty("ASTRA_DB_REGION") +
+                        ".apps.astra.datastax.com/api/rest/v2/keyspaces/" +
+                        env.getProperty("ASTRA_DB_KEYSPACE") +
+                        "/cdrates?where={}" ,
+                HttpMethod.GET,
+                httpEntity,
+                Object.class
+        );
+        */
+
+
+        /*
+        String whereCondition = "{}";
+
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(
+                        "https://" + env.getProperty("ASTRA_DB_ID") + "-" +
+                                env.getProperty("ASTRA_DB_REGION") +
+                                ".apps.astra.datastax.com/api/rest/v2/keyspaces/" +
+                                env.getProperty("ASTRA_DB_KEYSPACE") + "/cdrates"
+                )
+                .queryParam("where", whereCondition);
+
+        ResponseEntity<Object> resp = restTemplate.exchange(
+                uriBuilder.toUriString(),
+                HttpMethod.GET,
+                httpEntity,
+                Object.class
+        );
+        */
+        LOGGER.info(resp.toString());
+        return resp ;
     }
 
     /**
