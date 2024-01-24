@@ -4,6 +4,8 @@ package com.example.demo.model;
 //import org.springframework.data.cassandra.core.mapping.Table;
 
 
+import java.util.Date;
+
 //@Table
 public class CDRates {
 
@@ -15,14 +17,14 @@ public class CDRates {
     private String cduniqueid;
     private String createdby;
     private String createdon;
-    private String enddate;
+    private Date enddate;
     private double interestrate;
     private double managerrate;
     private int maximumdeposit;
     private int minimumdeposit;
     private int penaltydays;
     private double penaltypercentage;
-    private String startdate;
+    private Date startdate;
     private String statecode;
     private String status;
     private int termlength;
@@ -77,11 +79,11 @@ public class CDRates {
         this.createdon = createdon;
     }
 
-    public String getEnddate() {
+    public Date getEnddate() {
         return enddate;
     }
 
-    public void setEnddate(String enddate) {
+    public void setEnddate(Date enddate) {
         this.enddate = enddate;
     }
 
@@ -133,11 +135,11 @@ public class CDRates {
         this.penaltypercentage = penaltypercentage;
     }
 
-    public String getStartdate() {
+    public Date getStartdate() {
         return startdate;
     }
 
-    public void setStartdate(String startdate) {
+    public void setStartdate(Date startdate) {
         this.startdate = startdate;
     }
 

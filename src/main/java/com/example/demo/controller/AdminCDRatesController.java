@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.CDRateUpdate;
 import com.example.demo.model.CDRates;
-import com.example.demo.service.ConversionUtility;
+import com.example.demo.service.RateUtility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.uuid.Generators;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +34,7 @@ public class AdminCDRatesController {
     private final RestTemplate restTemplate;
 
     @Autowired
-    private ConversionUtility conversionUtility;
+    private RateUtility conversionUtility;
 
     private final Environment env;
 

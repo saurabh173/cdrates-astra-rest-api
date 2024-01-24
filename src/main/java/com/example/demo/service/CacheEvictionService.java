@@ -14,14 +14,14 @@ public class CacheEvictionService {
     private final CacheManager cacheManager;
 
     //Cache names
-    private final List<String> cacheNames = Arrays.asList("nonManagerCDRates", "nonManagerCDHistoryRates", "managerCDHistoryRates", "managerCDRates");
+    private final List<String> cacheNames = Arrays.asList("nonManagerCDRates", "nonManagerCDHistoryRates", "managerCDHistoryRates", "managerCDRates","CDNonMgrRates","historicalNonMgrCDRates","CDRates","historicalCDRates");
 
     public CacheEvictionService(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
 
     // Use a loop to evict each cache separately
-    @CacheEvict(cacheNames = {"nonManagerCDRates", "nonManagerCDHistoryRates", "managerCDHistoryRates", "managerCDRates"}, allEntries = true)
+    @CacheEvict(cacheNames = {"nonManagerCDRates", "nonManagerCDHistoryRates", "managerCDHistoryRates", "managerCDRates", "CDNonMgrRates","historicalNonMgrCDRates","CDRates","historicalCDRates"}, allEntries = true)
     @Scheduled(cron = "0 0 3 * * ?") // At 3 AM every day
     public void evictCachesAt3AM() {
         for (String cacheName : cacheNames) {

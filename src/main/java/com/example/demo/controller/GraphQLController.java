@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.exception.CustomBadRequestException;
 import com.example.demo.model.CDRates;
 import com.example.demo.model.CDRatesWithoutManagerRate;
-import com.example.demo.service.ConversionUtility;
+import com.example.demo.service.RateUtility;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class GraphQLController {
     private final Environment env;
 
     @Autowired
-    private ConversionUtility conversionUtility;
+    private RateUtility conversionUtility;
 
     @Autowired
     RestTemplate restTemplate;

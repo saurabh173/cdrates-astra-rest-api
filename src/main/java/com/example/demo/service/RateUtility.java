@@ -2,8 +2,12 @@ package com.example.demo.service;
 
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 @Component
-public class ConversionUtility {
+public class RateUtility {
     public String getState(String zipString) {
 
         // Ensure param is a string to prevent unpredictable parsing results
@@ -185,4 +189,9 @@ public class ConversionUtility {
         return st;
     }
 
+    public boolean isStartDateWithinLast8Years(Date startDate) {
+        LocalDate eightYearsAgo = LocalDate.now().minusYears(8);
+        LocalDate startDateLocal = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return startDateLocal.isAfter(eightYearsAgo) || startDateLocal.isEqual(eightYearsAgo);
+    }
 }
