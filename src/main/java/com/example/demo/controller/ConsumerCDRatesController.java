@@ -112,6 +112,7 @@ public class ConsumerCDRatesController {
     @Cacheable(value = "nonManagerCDHistoryRates", key = "#zip")
     private ResponseEntity<List<CDRatesWithoutManagerRate>> getHistoricalRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = conversionUtility.getState(zip);
+        LOGGER.info("getHistoricalRatesForConsumer request received for Zip " + zip);
         if (state.equals("")){
             throw new CustomBadRequestException("Invalid zip supplied");
         }

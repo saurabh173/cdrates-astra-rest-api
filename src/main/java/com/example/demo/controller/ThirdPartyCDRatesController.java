@@ -15,38 +15,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
+@RequestMapping("/v1/thirdparty")
 public class ThirdPartyCDRatesController {
 
     @Autowired
-    private ObjectMapper objectMapper;  // Autowire ObjectMapper
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
-    private ConversionUtility conversionUtility;
-
+    private final WebClient webClient;
+    private final ConversionUtility conversionUtility;
     private final Environment env;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ThirdPartyCDRatesController.class);
 
-    public ThirdPartyCDRatesController(Environment env) {
+    public ThirdPartyCDRatesController(Environment env, ConversionUtility conversionUtility) {
         this.env = env;
+        this.conversionUtility = conversionUtility;
+        this.webClient = WebClient.builder()
+                .baseUrl("https://" + env.getProperty("ASTRA_DB_ID") + "-" + env.getProperty("ASTRA_DB_REGION") +
+                        ".apps.astra.datastax.com/api/rest/v2/keyspaces/" + env.getProperty("ASTRA_DB_KEYSPACE"))
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader("x-cassandra-token", env.getProperty("ASTRA_DB_APPLICATION_TOKEN"))
+                .build();
     }
 
     /**
@@ -62,39 +67,23 @@ public class ThirdPartyCDRatesController {
             @ApiResponse(responseCode = "429", description = "Too many requests"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/v1/thirdparty/currentrates/{zip}")
-    @Cacheable(value = "nonManagerCDRates", key = "#zip")
-    private ResponseEntity<List<CDRatesWithoutManagerRate>> getRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view certificate of deposit interest rates", required = true) @PathVariable String zip){
+    @GetMapping("/currentrates/{zip}")
+    private Mono<ResponseEntity<List<CDRatesWithoutManagerRate>>> getRatesForThirdParty(@Parameter(description = "Please enter valid US zip code to view certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = conversionUtility.getState(zip);
-        LOGGER.info("getRatesForConsumer request received for Zip " + zip);
+        LOGGER.info("getRatesForThirdParty request received for Zip " + zip);
 
         if (state.equals("")){
             throw new CustomBadRequestException("Invalid zip supplied");
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("x-cassandra-token", env.getProperty("ASTRA_DB_APPLICATION_TOKEN"));
-        HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
-
-
-        ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
-                "https://" +
-                        env.getProperty("ASTRA_DB_ID") +
-                        "-" +
-                        env.getProperty("ASTRA_DB_REGION") +
-                        ".apps.astra.datastax.com/api/rest/v2/keyspaces/" +
-                        env.getProperty("ASTRA_DB_KEYSPACE") +
-                        "/cdrates?where={}" ,
-                HttpMethod.GET,
-                httpEntity,
-                new ParameterizedTypeReference<Map<String, Object>>() {}
-        );
-
-        // Extract the "data" array from the response
-        List<CDRatesWithoutManagerRate> customList = objectMapper.convertValue(responseEntity.getBody().get("data"), new TypeReference<List<CDRatesWithoutManagerRate>>() {});
-
-        return new ResponseEntity<>(customList, responseEntity.getStatusCode());
-
+        return webClient.get()
+                .uri("/cdrates?where={}", zip)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .map(responseBody -> {
+                    List<CDRatesWithoutManagerRate> customList = objectMapper.convertValue(responseBody.get("data"), new TypeReference<List<CDRatesWithoutManagerRate>>() {});
+                    return ResponseEntity.ok(customList);
+                });
     }
 
     /**
@@ -110,38 +99,25 @@ public class ThirdPartyCDRatesController {
             @ApiResponse(responseCode = "429", description = "Too many requests"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/v1/thirdparty/hisoricalrates/{zip}")
-    @Cacheable(value = "nonManagerCDHistoryRates", key = "#zip")
-    private ResponseEntity<List<CDRatesWithoutManagerRate>> getHistoricalRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
+    @GetMapping("/hisoricalrates/{zip}")
+    private Mono<ResponseEntity<List<CDRatesWithoutManagerRate>>> getHistoricalRatesForThirdParty(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = conversionUtility.getState(zip);
+        LOGGER.info("getHistoricalRatesForThirdParty request received for Zip " + zip);
+
         if (state.equals("")){
             throw new CustomBadRequestException("Invalid zip supplied");
         }
 
         Instant eightYearsAgo = Instant.now().minus(Duration.ofDays(365 * 8));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("x-cassandra-token", env.getProperty("ASTRA_DB_APPLICATION_TOKEN"));
-        HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
-
-
-        ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
-                "https://" +
-                        env.getProperty("ASTRA_DB_ID") +
-                        "-" +
-                        env.getProperty("ASTRA_DB_REGION") +
-                        ".apps.astra.datastax.com/api/rest/v2/keyspaces/" +
-                        env.getProperty("ASTRA_DB_KEYSPACE") +
-                        "/cd_historical_rates?where={}" ,
-                HttpMethod.GET,
-                httpEntity,
-                new ParameterizedTypeReference<Map<String, Object>>() {}
-        );
-
-        // Extract the "data" array from the response
-        List<CDRatesWithoutManagerRate> customList = objectMapper.convertValue(responseEntity.getBody().get("data"), new TypeReference<List<CDRatesWithoutManagerRate>>() {});
-
-        return new ResponseEntity<>(customList, responseEntity.getStatusCode());
+        return webClient.get()
+                .uri("/cd_historical_rates?where={}", zip)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .map(responseBody -> {
+                    List<CDRatesWithoutManagerRate> customList = objectMapper.convertValue(responseBody.get("data"), new TypeReference<List<CDRatesWithoutManagerRate>>() {});
+                    return ResponseEntity.ok(customList);
+                });
     }
 
  }
