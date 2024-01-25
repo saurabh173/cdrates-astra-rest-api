@@ -6,6 +6,8 @@ import com.example.demo.model.CDRatesWithoutManagerRate;
 import com.example.demo.service.RateUtility;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
@@ -36,6 +38,8 @@ public class GraphQLController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLController.class);
+
     public GraphQLController(Environment env) {
         this.env = env;
     }
@@ -43,6 +47,7 @@ public class GraphQLController {
     @QueryMapping
     public List<CDRates> managerRatesByZip(@Argument String zip) {
         String state = conversionUtility.getState(zip);
+        LOGGER.info("GraphQL managerRatesByZip request received for Zip " + zip);
         if (state.equals("")){
             return null;
         }
@@ -62,6 +67,7 @@ public class GraphQLController {
     @QueryMapping
     public List<CDRatesWithoutManagerRate> ratesByZip(@Argument String zip) {
         String state = conversionUtility.getState(zip);
+        LOGGER.info("GraphQL ratesByZip request received for Zip " + zip);
         if (state.equals("")) {
             return null;
         }

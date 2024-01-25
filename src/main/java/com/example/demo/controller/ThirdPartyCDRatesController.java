@@ -74,7 +74,7 @@ public class ThirdPartyCDRatesController {
     private Mono<ResponseEntity<List<CDRatesWithoutManagerRate>>> getRatesForThirdParty(@Parameter(description = "Please enter valid US zip code to view certificate of deposit interest rates", required = true) @PathVariable String zip){
         return Mono.fromCallable(() -> {
             String state = rateUtility.getState(zip);
-            LOGGER.info("getRatesForConsumer request received for Zip " + zip);
+            LOGGER.info("getRatesForThirdParty request received for Zip " + zip);
 
             if (state.equals("")) {
                 throw new CustomBadRequestException("Invalid zip supplied");
@@ -105,7 +105,7 @@ public class ThirdPartyCDRatesController {
     private Flux<ResponseEntity<List<CDRatesWithoutManagerRate>>> getHistoricalRatesForThirdParty(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
         return Flux.defer(() -> {
             String state = rateUtility.getState(zip);
-            LOGGER.info("getHistoricalRatesForConsumer request received for Zip " + zip);
+            LOGGER.info("getHistoricalRatesForThirdParty request received for Zip " + zip);
 
             if (state.equals("")) {
                 return Mono.error(new CustomBadRequestException("Invalid zip supplied"));

@@ -61,6 +61,7 @@ public class ManagerCDRatesController {
     @Cacheable(value = "managerCDRates", key = "#zip")
     private ResponseEntity<List<CDRates>> getRates(@Parameter(description = "Please enter valid US zip code to view certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = rateUtility.getState(zip);
+        LOGGER.info("getRates for manager request received for Zip " + zip);
         if (state.equals("")){
             throw new CustomBadRequestException("Invalid zip supplied");
         }
@@ -90,6 +91,7 @@ public class ManagerCDRatesController {
     @Cacheable(value = "managerCDHistoryRates", key = "#zip")
     private ResponseEntity<List<CDRates>> getHistoricalRates(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = rateUtility.getState(zip);
+        LOGGER.info("getHistoricalRates for manager request received for Zip " + zip);
         if (state.equals("")){
             throw new CustomBadRequestException("Invalid zip supplied");
         }

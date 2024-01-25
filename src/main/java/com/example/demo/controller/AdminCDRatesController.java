@@ -64,6 +64,8 @@ public class AdminCDRatesController {
     @PostMapping("/v1/admin/currentrates")
     private CDRates addCurrentRates(@RequestBody CDRates newRate){
 
+        LOGGER.info("addCurrentRates request received for AdminCDRatesController");
+
         UUID timeUuid = Generators.timeBasedGenerator().generate();
         newRate.setId(timeUuid.toString());
 
@@ -97,7 +99,7 @@ public class AdminCDRatesController {
     })
     @PatchMapping("/v1/admin/rate/{id}")
     private ResponseEntity<CDRateUpdate> updateCDRateStatus(@RequestBody CDRateUpdate newRate, @PathVariable String id){
-
+        LOGGER.info("updateCDRateStatus request received for AdminCDRatesController");
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-cassandra-token", env.getProperty("ASTRA_DB_APPLICATION_TOKEN"));
         headers.set("Content-type", "application/json;charset=UTF-8");
