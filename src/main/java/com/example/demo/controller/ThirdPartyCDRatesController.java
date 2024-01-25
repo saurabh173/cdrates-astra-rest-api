@@ -101,7 +101,7 @@ public class ThirdPartyCDRatesController {
             @ApiResponse(responseCode = "429", description = "Too many requests"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/hisoricalrates/{zip}")
+    @GetMapping("/historicalrates/{zip}")
     private Flux<ResponseEntity<List<CDRatesWithoutManagerRate>>> getHistoricalRatesForThirdParty(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
         return Flux.defer(() -> {
             String state = rateUtility.getState(zip);

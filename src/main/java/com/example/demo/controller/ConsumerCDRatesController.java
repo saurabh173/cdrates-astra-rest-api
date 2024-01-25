@@ -89,7 +89,7 @@ public class ConsumerCDRatesController {
             @ApiResponse(responseCode = "429", description = "Too many requests"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/v1/consumer/hisoricalrates/{zip}")
+    @GetMapping("/v1/consumer/historicalrates/{zip}")
     @Cacheable(value = "nonManagerCDHistoryRates", key = "#zip")
     private ResponseEntity<List<CDRatesWithoutManagerRate>> getHistoricalRatesForConsumer(@Parameter(description = "Please enter valid US zip code to view historical certificate of deposit interest rates", required = true) @PathVariable String zip){
         String state = rateUtility.getState(zip);
